@@ -1,11 +1,4 @@
 import { galleryItems } from "./gallery-items.js";
-// import * as basicLightbox from "basiclightbox";
-
-// const instance = basicLightbox.create(`
-//     <img src="assets/images/image.png" width="800" height="600">
-// `);
-
-// instance.show();
 
 const imgList = document.querySelector(".gallery");
 const imgMarkUp = createImg(galleryItems);
@@ -16,11 +9,35 @@ function createImg(imgItems) {
   return imgItems
     .map((img) => {
       return `
-    <li>
-     <a class = "gallery__link">
-      <img class = "gallery__image" src = ${img.preview} alt = ${img.description}/>
+    <li class="gallery__item">
+     <a class="gallery__link" href=${img.original}>
+      <img
+       class="gallery__image"       
+       src = ${img.preview} 
+       data-source=${img.original} 
+       alt = ${img.description}/>
      </a>
     </li>`;
     })
     .join("");
 }
+
+const images = document.querySelectorAll(".gallery");
+
+images.forEach((image) => {
+  image.addEventListener("click", (event) => {
+    event.preventDefault();
+    const instance = basicLightbox.create(`
+        <img src="${event.target.dataset.source}" width="800" height="600">
+    `);
+    instance.show();
+
+    const closeLightbox = (event) => {
+      if (event.code === "Escape") {
+        instance.close();
+        document.removeEventListener("keydown", closeLightbox);
+      }
+    };
+    document.addEventListener("keydown", closeLightbox);
+  });
+});
