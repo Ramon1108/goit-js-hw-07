@@ -22,22 +22,20 @@ function createImg(imgItems) {
     .join("");
 }
 
-const images = document.querySelectorAll(".gallery");
+const images = document.querySelector(".gallery");
 
-images.forEach((image) => {
-  image.addEventListener("click", (event) => {
-    event.preventDefault();
-    const instance = basicLightbox.create(`
+images.addEventListener("click", (event) => {
+  event.preventDefault();
+  const instance = basicLightbox.create(`
         <img src="${event.target.dataset.source}" width="800" height="600">
     `);
-    instance.show();
+  instance.show();
 
-    const closeLightbox = (event) => {
-      if (event.code === "Escape") {
-        instance.close();
-        document.removeEventListener("keydown", closeLightbox);
-      }
-    };
-    document.addEventListener("keydown", closeLightbox);
-  });
+  const closeLightbox = (event) => {
+    if (event.code === "Escape") {
+      instance.close();
+      document.removeEventListener("keydown", closeLightbox);
+    }
+  };
+  document.addEventListener("keydown", closeLightbox);
 });
